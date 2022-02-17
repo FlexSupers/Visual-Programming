@@ -1,78 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace visual_prog
+namespace lab1
 {
     public class HW1
     {
+        public static void Turn(int[] customers, int[] c, int n, ref int i)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (c[j] == 0)
+                {
+                    c[j] = customers[i];
+                    i++;
+                    if (i > customers.Length) break;
+                }
+            }
+        }
+
+        public static void Init(int[] c, int n)
+        {
+            for (int t = 0; t < n; t++) c[t] = 0;
+        }
+
+        public static int Max(int[] c, int n)
+        {
+            int max = 0;
+            for (int j = 0; j < n; j++) if (max < c[j]) max = c[j];
+            return max;
+        }
+
         public static long QueueTime(int[] customers, int n)
         {
-            return 0;
-        }
-    }
 
-    public class Queue <T>
-    {
-        private int _Front = -1;
-        private int _Rear = -1;
-        private int _Count = 0;
-        private readonly int _Size;
-        private readonly T[] _Array;
-
-        public Queue(int Size)
-        {
-            this._Size = Size;
-            this._Array = new T[Size];
-        }
-
-        public bool IsFull()  // Проверяем заполнена ли очередь
-        {
-            return _Rear == _Size - 1;
-        }
-
-        public bool IsEmpty() // Проверяем если очередь пуста
-        {
-            return _Count == 0;
-        }
-
-        public void Enqueue(T Item)
-        {
-            if (this.IsFull())
-                throw new Exception("Очередь полностью заполнена.");
-            _Array[++_Rear] = Item;
-            _Count++;
-        }
-
-        public T Dequeue()
-        {
-            if (this.IsEmpty())
-                throw new Exception("Очередь еще не заполнена.");
-            T value = _Array[++_Front];
-            _Count--;
-            if (_Front == _Rear)
+            int[] c = new int[n];
+            Init(c, n);
+            int i = 0;
+            long time = 0;
+            Turn(customers, c, n, ref i);
+            while (i < customers.Length)
             {
-                _Front = -1;
-                _Rear = -1;
+                time++;
+                for (int j = 0; j < n; j++) c[j]--;
+                for (int j = 0; j < n; j++) Turn(customers, c, n, ref i);
             }
-            return value;
-        }
-
-        public T Peek() // служит для считывания первого элемента без его удаления
-        {
-            if (this.IsEmpty())
-                throw new Exception("Очередь не заполнена.");
-            T value = _Array[_Front + 1];
-            return value;
-        }
-
-        public int Size
-        {
-            get { return _Size; }
-        }
-
-        public int Count
-        {
-            get { return _Count; }
+            int max = 0;
+            time += Max(c, n);
+            return time;
         }
     }
 
@@ -80,17 +53,18 @@ namespace visual_prog
     {
         static void Main(string[] args)
         {
-            Queue<string> q = new Queue<string>(5);
-            q.Enqueue("1");
+            long time;
+            int[] mas1 = new int[3] { 5, 3, 4 };
+            time = HW1.QueueTime(mas1, 1);
+            Console.WriteLine($"{time}");
 
-            Console.WriteLine("Кто сейчас стоит на кассе:" + q.Dequeue());
+            int[] mas2 = new int[4] { 10, 2, 3, 3 };
+            time = HW1.QueueTime(mas2, 2);
+            Console.WriteLine($"{time}");
 
-            Console.WriteLine("Всего осталось человек в очереди:" + q.Count.ToString());
-            Console.Read();
-        } 
-
-
+            int[] mas3 = new int[3] { 2, 3, 10 };
+            time = HW1.QueueTime(mas3, 2);
+            Console.WriteLine($"{time}");
+        }
     }
-
-
 }
