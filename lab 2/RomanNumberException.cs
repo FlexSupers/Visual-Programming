@@ -2,5 +2,6 @@
 
 internal class RomanNumberException : Exception
 {
-    /* Исключения для класса TO DO */
+    public RomanNumberException() : base() { }
+    public RomanNumberException(string message) : base(message) { }
 }

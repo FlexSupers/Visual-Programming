@@ -35,6 +35,11 @@ public class RomanNumber : ICloneable, IComparable
     /* Конструктор получает число n, которое должен представлять объект класса */
     public RomanNumber(ushort n)
     {
+        if (n <= 0)
+        {
+            throw new RomanNumberException();
+        }
+
         arabic_value = n;
         roman_value = convert_arabic_to_roman(n);
     }
@@ -92,6 +97,11 @@ public class RomanNumber : ICloneable, IComparable
         }
 
         if (n2.arabic_value == 0)
+        {
+            throw new RomanNumberException();
+        }
+
+        if ((ushort)(n1.arabic_value / n2.arabic_value) == 0)
         {
             throw new RomanNumberException();
         }
